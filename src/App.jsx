@@ -155,13 +155,13 @@ export default function App() {
       </div>
 
       <div className="relative w-full max-w-[1400px] h-[85dvh] bg-black rounded-3xl overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_50px_rgba(0,255,255,0.3),0_0_100px_rgba(255,0,255,0.2)] my-8">
-        {/* Background gradient effects */}
+        {/* Decorative gradients */}
         <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-cyan-500/20 to-transparent blur-2xl"></div>
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-fuchsia-500/20 to-transparent blur-2xl"></div>
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-lime-500/20 to-transparent blur-2xl"></div>
         <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-pink-500/20 to-transparent blur-2xl"></div>
 
-        {/* Header & Search */}
+        {/* Header */}
         <div className="relative border-b-2 border-cyan-500/30 px-4 md:px-10 py-3 shadow-[0_4px_20px_rgba(0,255,255,0.1)]">
           <div className="flex flex-col sm:flex-row items-center gap-4 mb-3">
             <div className="flex-shrink-0">
@@ -213,9 +213,9 @@ export default function App() {
           </div>
         </div>
 
-        {/* Scrollable perfume list */}
-        <div className="flex flex-col h-[calc(85dvh-160px)]">
-          <div className="flex-1 overflow-y-auto custom-scrollbar px-6 md:px-10 py-4">
+        {/* Scrollable Content (with extra bottom padding) */}
+        <div className="flex flex-col h-[calc(85dvh-120px)]">
+          <div className="flex-1 overflow-y-auto custom-scrollbar px-6 md:px-10 py-4 pb-32">
             {loadingInitial ? (
               <div className="flex justify-center items-center h-full">
                 <Spinner />
@@ -237,15 +237,35 @@ export default function App() {
                       <div className="inline-block p-6 bg-black border-2 border-cyan-500/30 rounded-2xl mb-4 shadow-[0_0_30px_rgba(0,255,255,0.2)]">
                         <p className="text-cyan-400 text-4xl">💫</p>
                       </div>
-                      <h3 className="text-cyan-100 text-xl mb-2">
-                        No fragrances found
-                      </h3>
+                      <h3 className="text-cyan-100 text-xl mb-2">No fragrances found</h3>
                       <p className="text-cyan-400/70 text-sm">
                         Try adjusting your search or filters
                       </p>
                     </div>
                   )}
                 </div>
+
+                {totalPages > 1 && (
+                  <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-6 pt-4 border-t-2 border-cyan-500/20">
+                    <button
+                      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(0,255,255,0.4)] transition-all border-2 border-cyan-400/50 text-sm"
+                    >
+                      Previous
+                    </button>
+                    <span className="text-cyan-300 px-4 text-sm">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white rounded-xl disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(255,0,255,0.4)] transition-all border-2 border-fuchsia-400/50 text-sm"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
 
                 <footer
                   style={{
@@ -280,36 +300,13 @@ export default function App() {
                   </a>
                   . <br />
                   <span style={{ color: "#888" }}>
-                    This work is for educational and portfolio purposes only. All
-                    trademarks and data belong to their respective owners.
+                    This work is for educational and portfolio purposes only. All trademarks and
+                    data belong to their respective owners.
                   </span>
                 </footer>
               </>
             )}
           </div>
-
-          {/* Pagination moved outside scrollable area */}
-          {totalPages > 1 && (
-            <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 py-4 border-t-2 border-cyan-500/20 bg-black/60">
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(0,255,255,0.4)] transition-all border-2 border-cyan-400/50 text-sm"
-              >
-                Previous
-              </button>
-              <span className="text-cyan-300 px-4 text-sm">
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white rounded-xl disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(255,0,255,0.4)] transition-all border-2 border-fuchsia-400/50 text-sm"
-              >
-                Next
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
