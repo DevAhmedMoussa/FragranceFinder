@@ -29,7 +29,7 @@ export default function SearchBar({ notes, setNotes }) {
           : "0 0 0 rgba(0,0,0,0)",
       }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className="bg-black border-2 border-cyan-500/30 rounded-xl p-1 flex flex-wrap gap-2 items-center hover:border-cyan-500/60 transition-colors duration-300"
+      className="w-full bg-black border-2 border-cyan-500/30 rounded-xl p-2 md:p-1 flex flex-wrap gap-2 items-center hover:border-cyan-500/60 transition-colors duration-300 min-h-[3.5rem]"
     >
       <motion.div
         animate={{
@@ -40,35 +40,38 @@ export default function SearchBar({ notes, setNotes }) {
           repeat: focused ? Infinity : 0,
           ease: "easeInOut",
         }}
+        className="flex-shrink-0"
       >
-        <Search className="bg-black border-2 border-cyan-500/30 rounded-xl p-1 flex flex-wrap gap-2 items-center hover:border-cyan-500/60 transition-colors duration-300 w-full sm:w-auto"
- />
+        <Search className="w-5 h-5 text-cyan-400 ml-1" />
       </motion.div>
 
-      <AnimatePresence>
-        {notes.map((note, i) => (
-          <motion.div
-            key={note}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Tag note={note} onRemove={() => removeNote(note)} />
-          </motion.div>
-        ))}
-      </AnimatePresence>
+      <div className="flex flex-wrap gap-2 flex-1 min-w-0">
+        <AnimatePresence>
+          {notes.map((note, i) => (
+            <motion.div
+              key={note}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.3 }}
+              className="flex-shrink-0"
+            >
+              <Tag note={note} onRemove={() => removeNote(note)} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
 
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="Enter a note (e.g., vanilla, amber)..."
-className="flex-1 outline-none p-2 text-cyan-100 bg-transparent placeholder:text-cyan-600 text-sm sm:text-base"
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-      />
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Enter a note..."
+          className="flex-1 min-w-[120px] outline-none p-2 text-cyan-100 bg-transparent placeholder:text-cyan-600 text-base md:text-sm"
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+        />
+      </div>
     </motion.div>
   );
 }

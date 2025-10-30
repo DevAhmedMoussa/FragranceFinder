@@ -168,52 +168,52 @@ export default function App() {
         <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-pink-500/20 to-transparent blur-2xl"></div>
 
 
-        <div className="relative border-b-2 border-cyan-500/30 px-6 md:px-10 py-3 shadow-[0_4px_20px_rgba(0,255,255,0.1)]">
-          <div className="flex items-center gap-6 mb-3">
-            <div className="flex-shrink-0">
-              <img src="/logoo.png" alt="Logo" width="75" height="75" />
-            </div>
-     <div className="flex-1 min-w-0">
-  <SearchBar notes={notes} setNotes={setNotes} />
+        // In your App.jsx, update the header section:
+
+<div className="relative border-b-2 border-cyan-500/30 px-4 md:px-10 py-3 shadow-[0_4px_20px_rgba(0,255,255,0.1)]">
+  <div className="flex flex-col sm:flex-row items-center gap-4 mb-3">
+    <div className="flex-shrink-0">
+      <img src="/logoo.png" alt="Logo" className="w-16 h-16 sm:w-20 sm:h-20" />
+    </div>
+    <div className="w-full sm:flex-1">
+      <SearchBar notes={notes} setNotes={setNotes} />
+    </div>
+  </div>
+
+  <div className="flex flex-wrap gap-2 justify-center items-center">
+    {["all", "men", "women", "unisex"].map((filter) => (
+      <button
+        key={filter}
+        onClick={() => setGenderFilter(filter)}
+        className={`px-3 py-2 rounded-xl transition-all border-2 text-xs ${
+          genderFilter === filter
+            ? 'bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white border-fuchsia-400 shadow-[0_0_15px_rgba(255,0,255,0.6)]'
+            : 'bg-black border-cyan-500/30 text-cyan-300 hover:border-cyan-500/60 hover:shadow-[0_0_10px_rgba(0,255,255,0.3)] hover:text-cyan-200'
+        }`}
+      >
+        {filter === "all" ? "All" : filter === "men" ? "Men" : filter === "women" ? "Women" : "Unisex"}
+      </button>
+    ))}
+    <button
+      onClick={() => setViewFavourites((prev) => !prev)}
+      className={`px-3 py-2 rounded-xl transition-all border-2 text-xs ${
+        viewFavourites 
+          ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white border-red-400 shadow-[0_0_15px_rgba(255,0,0,0.6)]'
+          : 'bg-black border-cyan-500/30 text-cyan-300 hover:border-cyan-500/60 hover:shadow-[0_0_10px_rgba(0,255,255,0.3)] hover:text-cyan-200'
+      }`}
+    >
+      {viewFavourites ? "Favourites" : "Favourites"}
+    </button>
+    <select
+      onChange={(e) => setSortOption(e.target.value)}
+      className="px-3 py-2 rounded-xl bg-black border-2 border-cyan-500/30 text-cyan-300 focus:border-cyan-500 focus:shadow-[0_0_10px_rgba(0,255,255,0.3)] text-xs"
+    >
+      <option value="default">Sort by Rating</option>
+      <option value="highToLow">Rating: High → Low</option>
+      <option value="lowToHigh">Rating: Low → High</option>
+    </select>
+  </div>
 </div>
-
-
-          </div>
-
-          <div className="flex flex-wrap gap-1.5 justify-center items-center">
-            {["all", "men", "women", "unisex"].map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setGenderFilter(filter)}
-                className={`px-3 py-1.5 rounded-xl transition-all border-2 text-xs ${
-                  genderFilter === filter
-                    ? 'bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white border-fuchsia-400 shadow-[0_0_15px_rgba(255,0,255,0.6)]'
-                    : 'bg-black border-cyan-500/30 text-cyan-300 hover:border-cyan-500/60 hover:shadow-[0_0_10px_rgba(0,255,255,0.3)] hover:text-cyan-200'
-                }`}
-              >
-                {filter === "all" ? "All" : filter === "men" ? "For Men" : filter === "women" ? "For Women" : "Unisex"}
-              </button>
-            ))}
-            <button
-              onClick={() => setViewFavourites((prev) => !prev)}
-              className={`px-3 py-1.5 rounded-xl transition-all border-2 text-xs ${
-                viewFavourites 
-                  ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white border-red-400 shadow-[0_0_15px_rgba(255,0,0,0.6)]'
-                  : 'bg-black border-cyan-500/30 text-cyan-300 hover:border-cyan-500/60 hover:shadow-[0_0_10px_rgba(0,255,255,0.3)] hover:text-cyan-200'
-              }`}
-            >
-              {viewFavourites ? "Viewing Favourites" : "View Favourites"}
-            </button>
-            <select
-              onChange={(e) => setSortOption(e.target.value)}
-              className="px-3 py-1.5 rounded-xl bg-black border-2 border-cyan-500/30 text-cyan-300 focus:border-cyan-500 focus:shadow-[0_0_10px_rgba(0,255,255,0.3)] text-xs"
-            >
-              <option value="default">Sort by Rating</option>
-              <option value="highToLow">Rating: High → Low</option>
-              <option value="lowToHigh">Rating: Low → High</option>
-            </select>
-          </div>
-        </div>
 
 
         <div className="flex flex-col h-[calc(85vh-120px)]">
@@ -285,30 +285,7 @@ export default function App() {
     wordWrap: "break-word",
   }}
 >
-  © 2025 <strong>SCENTD</strong>. All rights reserved. <br />
-  This project uses publicly available data from{" "}
-  <a
-    href="https://www.kaggle.com/datasets/olgagmiufana1/fragrantica-com-fragrance-dataset"
-    target="_blank"
-    rel="noopener noreferrer"
-    style={{ color: "#0ff", textDecoration: "underline" }}
-  >
-    Fragrantica.com fragrance dataset on Kaggle
-  </a>
-  , licensed under{" "}
-  <a
-    href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-    target="_blank"
-    rel="noopener noreferrer"
-    style={{ color: "#0ff", textDecoration: "underline" }}
-  >
-    CC BY-NC-SA 4.0
-  </a>
-  . <br />
-  <span style={{ color: "#888" }}>
-    This work is for educational and portfolio purposes only. All trademarks and
-    data belong to their respective owners.
-  </span>
+  © 2025 <strong>SCENTD</strong>. All rights reserved.
 </footer>
 
         </div>
