@@ -161,7 +161,7 @@ export default function App() {
       </div>
 
 
-      <div className="relative w-full max-w-[1400px] h-[85vh] bg-black rounded-3xl overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_50px_rgba(0,255,255,0.3),0_0_100px_rgba(255,0,255,0.2)] my-8">
+<div className="relative w-full max-w-[1400px] min-h-[85vh] bg-black rounded-3xl overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_50px_rgba(0,255,255,0.3),0_0_100px_rgba(255,0,255,0.2)] my-8 flex flex-col">
         <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-cyan-500/20 to-transparent blur-2xl"></div>
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-fuchsia-500/20 to-transparent blur-2xl"></div>
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-lime-500/20 to-transparent blur-2xl"></div>
@@ -215,7 +215,7 @@ export default function App() {
 </div>
 
 
-        <div className="flex flex-col h-[calc(85vh-120px)]">
+<div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto custom-scrollbar px-6 md:px-10 py-4">
             {loadingInitial ? (
               <div className="flex justify-center items-center h-full">
