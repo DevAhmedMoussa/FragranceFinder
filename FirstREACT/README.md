@@ -5,6 +5,12 @@ Instead of searching by just one note (like vanilla or oud), users can input *mu
 
 ---
 
+# App Link
+
+https://fragrancefinder-kqfh.onrender.com
+
+---
+
 ## ✨ Demo
 🧠 *“I like vanilla, oud, and raspberry.”*  
 ➡️ Fragrance Finder instantly shows perfumes that combine **all** these notes — not just one.  
