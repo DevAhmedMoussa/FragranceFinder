@@ -168,7 +168,6 @@ export default function App() {
         <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-pink-500/20 to-transparent blur-2xl"></div>
 
 
-        // In your App.jsx, update the header section:
 
 <div className="relative border-b-2 border-cyan-500/30 px-4 md:px-10 py-3 shadow-[0_4px_20px_rgba(0,255,255,0.1)]">
   <div className="flex flex-col sm:flex-row items-center gap-4 mb-3">
