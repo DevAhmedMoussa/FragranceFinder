@@ -173,9 +173,10 @@ export default function App() {
             <div className="flex-shrink-0">
               <img src="/logoo.png" alt="Logo" width="75" height="75" />
             </div>
-         <div className="flex-1 min-w-[250px] w-full">
+     <div className="flex-1 min-w-0">
   <SearchBar notes={notes} setNotes={setNotes} />
 </div>
+
 
           </div>
 
