@@ -268,21 +268,45 @@ export default function App() {
           </div>
         )}
 
-        {/* 👇 Move footer INSIDE scrollable area */}
+
         <footer
-          style={{
-            textAlign: "center",
-            fontSize: "12px",
-            color: "#aaa",
-            padding: "20px 20px 10px 20px",
-            lineHeight: "1.4",
-            maxWidth: "800px",
-            margin: "20px auto",
-            wordWrap: "break-word",
-          }}
-        >
-          © 2025 <strong>SCENTD</strong>. All rights reserved.
-        </footer>
+  style={{
+    textAlign: "center",
+    fontSize: "12px", 
+    color: "#aaa",
+    padding: "10px 20px",
+    lineHeight: "1.4",
+    maxWidth: "800px", 
+    margin: "20px auto", 
+    wordWrap: "break-word",
+  }}
+>
+  © 2025 <strong>SCENTD</strong>. All rights reserved. <br />
+  This project uses publicly available data from{" "}
+  <a
+    href="https://www.kaggle.com/datasets/olgagmiufana1/fragrantica-com-fragrance-dataset"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{ color: "#0ff", textDecoration: "underline" }}
+  >
+    Fragrantica.com fragrance dataset on Kaggle
+  </a>
+  , licensed under{" "}
+  <a
+    href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{ color: "#0ff", textDecoration: "underline" }}
+  >
+    CC BY-NC-SA 4.0
+  </a>
+  . <br />
+  <span style={{ color: "#888" }}>
+    This work is for educational and portfolio purposes only. All trademarks and
+    data belong to their respective owners.
+  </span>
+</footer>
+
       </>
     )}
   </div>
