@@ -1,7 +1,7 @@
 # 🌸 Fragrance Finder — Discover Your Perfect Scent Match
 
 A **React web application** that helps users discover perfumes perfectly tailored to their personal taste.  
-Instead of searching by just one note (like vanilla or oud), users can input *multiple notes they love* — and the app recommends fragrances that contain **all** of those notes.
+Instead of searching by just one note (like vanilla or oud), users can input *multiple notes they love* , and the app recommends fragrances that contain **all** of those notes.
 
 ---
 
