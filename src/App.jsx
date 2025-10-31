@@ -1,5 +1,12 @@
 import { useEffect, useState, useMemo } from "react";
-import { collection, getDocs, query, orderBy, limit, startAfter } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+  startAfter,
+} from "firebase/firestore";
 import { db } from "./firebase";
 import SearchBar from "./components/SearchBar";
 import PerfumeCard from "./components/PerfumeCard";
@@ -18,7 +25,12 @@ export default function App() {
   const [itemsPerPage] = useState(20);
 
   const [favourites, setFavourites] = useState(() => {
-    return JSON.parse(localStorage.getItem("favourites")) || [];
+    try {
+      const stored = localStorage.getItem("favourites");
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
   });
 
   useEffect(() => {
@@ -29,9 +41,18 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("favourites", JSON.stringify(favourites));
+    try {
+      localStorage.setItem("favourites", JSON.stringify(favourites));
+    } catch (err) {
+      console.error("Failed to save favourites:", err);
+    }
   }, [favourites]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [viewFavourites, genderFilter, notes]);
+
+  // Initial data fetch
   useEffect(() => {
     const fetchInitial = async () => {
       try {
@@ -56,13 +77,17 @@ export default function App() {
     if (!lastDoc || !hasMore) return;
 
     let cancelled = false;
-
     const fetchBackground = async () => {
       try {
         let currentLastDoc = lastDoc;
         while (!cancelled && hasMore) {
           const perfumesRef = collection(db, "perfumes");
-          const q = query(perfumesRef, orderBy("uploadedAt"), startAfter(currentLastDoc), limit(2000));
+          const q = query(
+            perfumesRef,
+            orderBy("uploadedAt"),
+            startAfter(currentLastDoc),
+            limit(2000)
+          );
           const snapshot = await getDocs(q);
 
           if (snapshot.empty) {
@@ -70,7 +95,10 @@ export default function App() {
             break;
           }
 
-          const newData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          const newData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
           setPerfumes((prev) => [...prev, ...newData]);
           currentLastDoc = snapshot.docs[snapshot.docs.length - 1];
 
@@ -98,10 +126,16 @@ export default function App() {
   const combinedFiltered = useMemo(() => {
     let results = perfumes;
 
+    if (viewFavourites) {
+      return results.filter((p) => favourites.includes(p.id));
+    }
+
     if (notes.length > 0) {
       results = results.filter((p) =>
         notes.every((note) =>
-          p.notes?.some((n) => n.toLowerCase().includes(note.toLowerCase()))
+          p.notes?.some((n) =>
+            n.toLowerCase().includes(note.toLowerCase())
+          )
         )
       );
     }
@@ -120,10 +154,6 @@ export default function App() {
         );
       return true;
     });
-
-    if (viewFavourites) {
-      results = results.filter((p) => favourites.includes(p.id));
-    }
 
     return results;
   }, [perfumes, notes, genderFilter, viewFavourites, favourites]);
@@ -147,21 +177,17 @@ export default function App() {
     <div className="min-h-screen overflow-auto flex items-center justify-center p-8 bg-black">
       <div
         className="fixed inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url("/bg.png")`,
-        }}
+        style={{ backgroundImage: `url("/bg.png")` }}
       >
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
       </div>
 
       <div className="relative w-full max-w-[1400px] h-[85dvh] bg-black rounded-3xl overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_50px_rgba(0,255,255,0.3),0_0_100px_rgba(255,0,255,0.2)] my-8">
-        {/* Decorative gradients */}
         <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-cyan-500/20 to-transparent blur-2xl"></div>
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-fuchsia-500/20 to-transparent blur-2xl"></div>
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-lime-500/20 to-transparent blur-2xl"></div>
         <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-pink-500/20 to-transparent blur-2xl"></div>
 
-        {/* Header */}
         <div className="relative border-b-2 border-cyan-500/30 px-4 md:px-10 py-3 shadow-[0_4px_20px_rgba(0,255,255,0.1)]">
           <div className="flex flex-col sm:flex-row items-center gap-4 mb-3">
             <div className="flex-shrink-0">
@@ -192,6 +218,7 @@ export default function App() {
                   : "Unisex"}
               </button>
             ))}
+
             <button
               onClick={() => setViewFavourites((prev) => !prev)}
               className={`px-3 py-2 rounded-xl transition-all border-2 text-xs ${
@@ -202,6 +229,7 @@ export default function App() {
             >
               Favourites
             </button>
+
             <select
               onChange={(e) => setSortOption(e.target.value)}
               className="px-3 py-2 rounded-xl bg-black border-2 border-cyan-500/30 text-cyan-300 focus:border-cyan-500 focus:shadow-[0_0_10px_rgba(0,255,255,0.3)] text-xs"
@@ -213,7 +241,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Scrollable Content (with extra bottom padding) */}
+        {/* Scrollable content */}
         <div className="flex flex-col h-[calc(85dvh-120px)]">
           <div className="flex-1 overflow-y-auto custom-scrollbar px-6 md:px-10 py-4 pb-32">
             {loadingInitial ? (
@@ -237,7 +265,9 @@ export default function App() {
                       <div className="inline-block p-6 bg-black border-2 border-cyan-500/30 rounded-2xl mb-4 shadow-[0_0_30px_rgba(0,255,255,0.2)]">
                         <p className="text-cyan-400 text-4xl">💫</p>
                       </div>
-                      <h3 className="text-cyan-100 text-xl mb-2">No fragrances found</h3>
+                      <h3 className="text-cyan-100 text-xl mb-2">
+                        No fragrances found
+                      </h3>
                       <p className="text-cyan-400/70 text-sm">
                         Try adjusting your search or filters
                       </p>
@@ -248,7 +278,9 @@ export default function App() {
                 {totalPages > 1 && (
                   <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 mt-6 pt-4 border-t-2 border-cyan-500/20">
                     <button
-                      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
                       disabled={currentPage === 1}
                       className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(0,255,255,0.4)] transition-all border-2 border-cyan-400/50 text-sm"
                     >
@@ -258,7 +290,9 @@ export default function App() {
                       Page {currentPage} of {totalPages}
                     </span>
                     <button
-                      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
                       disabled={currentPage === totalPages}
                       className="px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white rounded-xl disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(255,0,255,0.4)] transition-all border-2 border-fuchsia-400/50 text-sm"
                     >
@@ -300,8 +334,8 @@ export default function App() {
                   </a>
                   . <br />
                   <span style={{ color: "#888" }}>
-                    This work is for educational and portfolio purposes only. All trademarks and
-                    data belong to their respective owners.
+                    This work is for educational and portfolio purposes only.
+                    All trademarks and data belong to their respective owners.
                   </span>
                 </footer>
               </>
